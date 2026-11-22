@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Pengelola Portofolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar Dasbor -->
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <span class="navbar-brand fw-bold">Dasbor Portofolio</span>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('index') }}" target="_blank" class="btn btn-outline-info btn-sm">
+                    <i class="bi bi-eye me-1"></i>Lihat Web
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <!-- Notifikasi Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- 1. EDIT PROFIL -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white fw-bold">1. Edit Profil & Kontak</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_profil') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Lengkap</label>
+                        <input type="text" name="nama" class="form-control" value="{{ data.profil.nama }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Role / Jabatan</label>
+                        <input type="text" name="role" class="form-control" value="{{ data.profil.role }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ data.profil.email }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">No. WhatsApp (Awali 62 / 08)</label>
+                        <input type="text" name="whatsapp" class="form-control" value="{{ data.profil.get('whatsapp', '') }}" placeholder="Contoh: 6281234567890">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Username GitHub</label>
+                        <input type="text" name="github" class="form-control" value="{{ data.profil.github }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Bio Singkat</label>
+                        <textarea name="bio" class="form-control" rows="2" required>{{ data.profil.bio }}</textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark btn-sm">Simpan Perubahan Profil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. KELOLA PROYEK (CRUD) -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white fw-bold">2. Kelola Portofolio Proyek</div>
+            <div class="card-body">
+                <!-- Form Tambah Proyek -->
+                <form method="POST" action="{{ url_for('tambah_proyek') }}" class="row g-2 mb-4 bg-light p-3 rounded">
+                    <div class="col-md-4">
+                        <input type="text" name="judul" class="form-control form-control-sm" placeholder="Judul Proyek Baru" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="kategori" class="form-control form-control-sm" placeholder="Kategori (misal: Python / Web)" required>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="url" name="link" class="form-control form-control-sm" placeholder="Link GitHub (opsional)">
+                    </div>
+                    <div class="col-md-10">
+                        <input type="text" name="deskripsi" class="form-control form-control-sm" placeholder="Deskripsi singkat proyek..." required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success btn-sm w-100">+ Tambah</button>
+                    </div>
+                </form>
+
+                <!-- Tabel Proyek -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Judul Proyek</th>
+                                <th>Kategori</th>
+                                <th>Deskripsi</th>
+                                <th width="130">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in data.proyek %}
+                            <tr>
+                                <td class="fw-semibold">{{ p.judul }}</td>
+                                <td><span class="badge bg-info text-dark">{{ p.kategori }}</span></td>
+                                <td class="small">{{ p.deskripsi }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProyek{{ p.id }}">Edit</button>
+                                    <form method="POST" action="{{ url_for('hapus_proyek', item_id=p.id) }}" class="d-inline" onsubmit="return confirm('Hapus proyek ini?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">Belum ada data proyek.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. KELOLA SKILLS & 4. PENDIDIKAN -->
+        <div class="row g-4">
+            <!-- Skills -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white fw-bold">3. Kelola Skills</div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('tambah_skill') }}" class="row g-2 mb-3">
+                            <div class="col-6">
+                                <input type="text" name="nama" class="form-control form-control-sm" placeholder="Nama Skill" required>
+                            </div>
+                            <div class="col-4">
+                                <select name="level" class="form-select form-select-sm">
+                                    <option value="Dasar">Dasar</option>
+                                    <option value="Menengah">Menengah</option>
+                                    <option value="Mahir">Mahir</option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-success btn-sm w-100">+</button>
+                            </div>
+                        </form>
+
+                        <table class="table table-bordered table-sm align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr><th>Skill</th><th>Level</th><th width="120">Aksi</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for s in data.skills %}
+                                <tr>
+                                    <td>{{ s.nama }}</td>
+                                    <td>{{ s.level }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editSkill{{ s.id }}">Edit</button>
+                                        <form method="POST" action="{{ url_for('hapus_skill', item_id=s.id) }}" class="d-inline" onsubmit="return confirm('Hapus skill ini?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-2">Belum ada data skill.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pendidikan -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white fw-bold">4. Kelola Pendidikan</div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('tambah_pendidikan') }}" class="row g-2 mb-3">
+                            <div class="col-5">
+                                <input type="text" name="institusi" class="form-control form-control-sm" placeholder="Institusi" required>
+                            </div>
+                            <div class="col-4">
+                                <input type="text" name="jurusan" class="form-control form-control-sm" placeholder="Jurusan" required>
+                            </div>
+                            <div class="col-2">
+                                <input type="text" name="tahun" class="form-control form-control-sm" placeholder="Tahun" required>
+                            </div>
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-success btn-sm w-100">+</button>
+                            </div>
+                        </form>
+
+                        <table class="table table-bordered table-sm align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr><th>Institusi</th><th>Jurusan</th><th width="120">Aksi</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for edu in data.pendidikan %}
+                                <tr>
+                                    <td>{{ edu.institusi }}<br><small class="text-muted">{{ edu.tahun }}</small></td>
+                                    <td>{{ edu.jurusan }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editEdu{{ edu.id }}">Edit</button>
+                                        <form method="POST" action="{{ url_for('hapus_pendidikan', item_id=edu.id) }}" class="d-inline" onsubmit="return confirm('Hapus riwayat ini?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-2">Belum ada riwayat pendidikan.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for p in data.proyek %}
+    <div class="modal fade" id="editProyek{{ p.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ url_for('edit_proyek', item_id=p.id) }}" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Proyek</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">Judul</label>
+                        <input type="text" name="judul" class="form-control" value="{{ p.judul }}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Kategori</label>
+                        <input type="text" name="kategori" class="form-control" value="{{ p.kategori }}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Link GitHub</label>
+                        <input type="text" name="link" class="form-control" value="{{ p.link }}">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="deskripsi" class="form-control" rows="3" required>{{ p.deskripsi }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal Edit Skill -->
+    {% for s in data.skills %}
+    <div class="modal fade" id="editSkill{{ s.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <form method="POST" action="{{ url_for('edit_skill', item_id=s.id) }}" class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Edit Skill</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label small">Nama Skill</label>
+                        <input type="text" name="nama" class="form-control form-control-sm" value="{{ s.nama }}" required>
+                    </div>
+                    <div>
+                        <label class="form-label small">Level</label>
+                        <select name="level" class="form-select form-select-sm">
+                            <option value="Dasar" {% if s.level=='Dasar' %}selected{% endif %}>Dasar</option>
+                            <option value="Menengah" {% if s.level=='Menengah' %}selected{% endif %}>Menengah</option>
+                            <option value="Mahir" {% if s.level=='Mahir' %}selected{% endif %}>Mahir</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal Edit Pendidikan -->
+    {% for edu in data.pendidikan %}
+    <div class="modal fade" id="editEdu{{ edu.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <form method="POST" action="{{ url_for('edit_pendidikan', item_id=edu.id) }}" class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Edit Pendidikan</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label small">Institusi</label>
+                        <input type="text" name="institusi" class="form-control form-control-sm" value="{{ edu.institusi }}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Jurusan</label>
+                        <input type="text" name="jurusan" class="form-control form-control-sm" value="{{ edu.jurusan }}" required>
+                    </div>
+                    <div>
+                        <label class="form-label small">Tahun / Status</label>
+                        <input type="text" name="tahun" class="form-control form-control-sm" value="{{ edu.tahun }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
