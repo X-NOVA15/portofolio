@@ -1,0 +1,118 @@
+{
+    "profil": {
+        "nama": "Muhammad Hafiz Fuadhi",
+        "role": "Junior Web Developer",
+        "bio": "Saya merupakan mahasiswa S1 Informatika di Universitas Nahdlatul Ulama Yogyakarta yang memiliki ketertarikan besar terhadap perkembangan teknologi informasi, khususnya Cyber Security, Ethical Hacking, Blue Team, dan Network Security.\r\n\r\nSaya senang mempelajari hal-hal baru, belajar secara mandiri, serta mengeksplorasi teknologi melalui eksperimen dan pemecahan masalah. Saya memiliki kemampuan dasar dalam pemrograman Python, pengembangan web menggunakan HTML dan CSS, serta pemahaman dasar jaringan komputer.\r\n\r\nSaya terus berupaya mengembangkan kemampuan, memperluas wawasan, dan menerapkan ilmu yang telah dipelajari melalui berbagai proyek. Melalui portofolio ini, saya ingin mendokumentasikan hasil karya, menunjukkan proses perkembangan kemampuan, serta mempersiapkan diri untuk berkarier di bidang teknologi informasi.",
+        "email": "muhammadhafizfuadhi1@gmail.com",
+        "github": "X-NOVA15",
+        "whatsapp": "62 817-429-462"
+    },
+    "skills": [
+        {
+            "id": 1,
+            "nama": "Python",
+            "level": "Dasar"
+        },
+        {
+            "id": 2,
+            "nama": "Dasar Jaringan Komputer",
+            "level": "Dasar"
+        },
+        {
+            "id": 3,
+            "nama": "HTML & CSS",
+            "level": "Dasar"
+        },
+        {
+            "id": 4,
+            "nama": "Algoritma dan Logika Pemrograman",
+            "level": "Dasar"
+        },
+        {
+            "id": 5,
+            "nama": "Microsoft Excel",
+            "level": "Dasar"
+        },
+        {
+            "id": 6,
+            "nama": "Microsoft Word",
+            "level": "Dasar"
+        },
+        {
+            "id": 7,
+            "nama": "Canva Design",
+            "level": "Menengah"
+        },
+        {
+            "id": 8,
+            "nama": "konfigurasi IP Address",
+            "level": "Dasar"
+        },
+        {
+            "id": 9,
+            "nama": "Data Processing",
+            "level": "Dasar"
+        },
+        {
+            "id": 10,
+            "nama": "Matematika",
+            "level": "Menengah"
+        }
+    ],
+    "proyek": [
+        {
+            "id": 1,
+            "judul": "Kalkulator Sederhana Menggunakan Python",
+            "kategori": "Python CLI",
+            "deskripsi": "Mengembangkan program kalkulator sederhana menggunakan bahasa pemrograman Python untuk menghitung luas berbagai bangun datar dengan menerapkan rumus matematika dan algoritma pemrograman.",
+            "link": "https://github.com/X-NOVA15"
+        },
+        {
+            "id": 2,
+            "judul": "Implementasi Algoritma Sorting Menggunakan Python",
+            "kategori": "Algoritma",
+            "deskripsi": "Membuat program untuk mengurutkan sekumpulan data menggunakan bahasa pemrograman Python dengan menerapkan algoritma pengurutan (sorting).",
+            "link": "https://github.com/X-NOVA15"
+        },
+        {
+            "id": 3,
+            "judul": "Sistem Laporan Barang Toko Menggunakan Python",
+            "kategori": "Struktur Data",
+            "deskripsi": "Mengembangkan program pengelolaan data barang toko menggunakan struktur data List dan Dictionary untuk menyimpan, mengelola, dan menampilkan informasi barang.",
+            "link": "https://github.com/X-NOVA15"
+        },
+        {
+            "id": 4,
+            "judul": "Landing Page Website UMKM DhewokCraft",
+            "kategori": "Web Development",
+            "deskripsi": "Mengembangkan halaman website (landing page) untuk UMKM DhewokCraft sebagai media informasi dan pengenalan produk serta identitas usaha secara digital.",
+            "link": "https://github.com/X-NOVA15"
+        }
+    ],
+    "pendidikan": [
+        {
+            "id": 1,
+            "institusi": "Universitas Nahdlatul Ulama Yogyakarta",
+            "jurusan": "S1 Informatika",
+            "tahun": "Mahasiswa Aktif"
+        },
+        {
+            "id": 2,
+            "institusi": "Madrasah Aliyah Pamulangan (MA)",
+            "jurusan": "Lulusan Madrasah Aliyah",
+            "tahun": "Lulus"
+        },
+        {
+            "id": 3,
+            "institusi": "Madrasah Tsanawiyah Negeri 1 Teamnggung (MTsN)",
+            "jurusan": "Lulusan Madrasah Tsanawiyah",
+            "tahun": "Lulus"
+        },
+        {
+            "id": 4,
+            "institusi": "Madrasah Ibtidaiyah Al - Huda (MI)",
+            "jurusan": "Lulusan Madrasah Ibtidaiyah",
+            "tahun": "Lulus"
+        }
+    ]
+}
